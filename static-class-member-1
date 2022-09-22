@@ -1,0 +1,44 @@
+#include <iostream>
+#include <string>
+
+class Player {
+private:
+	static int num_players;
+	std::string name;
+	int health;
+	int xp;
+public:
+	std::string get_name() { return name; }
+	int get_health() { return health; }
+	int get_xp() { return xp; }
+	Player(std::string name = "unknown", int health = 0, int xp = 0) : name{ name }, health{ health }, xp{ xp } { ++num_players; std::cout << "Overloaded Default Constructor called." << std::endl; };
+	Player(const Player& source) : Player{ source.name, source.health, source.xp } { std::cout << "Copy Constructor called." << std::endl; };
+	~Player() { --num_players; std::cout << "Destructor being called." << std::endl; };
+	static int get_num_players();
+};
+
+int Player::num_players{ 0 };
+
+void display_active_players() {
+	std::cout << "Active players: " << Player::get_num_players() << std::endl;
+}
+
+int Player::get_num_players() {
+	return num_players;
+}
+
+int main()
+{
+	{
+		display_active_players();
+		Player hero{ "Hero" };
+		display_active_players();
+		{
+			Player jenny{ "Jenny" };
+			display_active_players();
+		}
+		display_active_players();
+	}
+	display_active_players();
+	return 0;
+}
